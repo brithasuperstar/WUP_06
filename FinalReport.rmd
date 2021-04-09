@@ -22,6 +22,8 @@ If not, then whose view differs from whom??
 # Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method. Discuss what data manipulations may be needed for example subsetting or other binning procedures and what sort of graphical displays and inferential tools will be used!-->
+Both variables are categorical. We used chi square test and fisher test.
+
 
 # Results
 
@@ -33,9 +35,39 @@ If not, then whose view differs from whom??
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question. Bottom line is to explain the features of the graph that are relevant to conforming or departing to what is expected by your null hypothesis !-->
 
+
+```{r}
+barchartGC(~RACE + BIGBANG,data=GSS)
+barchartGC(~RACE + BIGBANG,data=GSS, type="percent")
+
+```
+This graphs shows there is a difference in belief in the bigbang theory based on race.
+
+
+```{r}
+dd2 <- GSS %>% group_by(RACE,BIGBANG) %>% summarize(count=n()) %>% mutate(prcnt=count/sum(count))
+
+basicC <- ggplot(dd2,aes(x=RACE,y=count,fill=BIGBANG))
+basicC + geom_bar(stat="identity",position="dodge")
+#Now for percentage plot
+
+basicCC <- ggplot(dd2,aes(x=RACE,y=prcnt*100,fill=BIGBANG)) 
+basicCC + geom_bar(stat="identity", position = "dodge")
+```
+  This graphs shows the same thing on the previous one.
+
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+ 
+
+```{r}
+table1 <- xtabs(~RACE + BIGBANG, data=GSS)
+rowPerc(table1)
+colPerc(table1)
+```
+
+The nummerical summary shows that most of black people do not believe in the bigbang theory. For white and other races it is about 50/50. 
 
 ## Inferential Results
 
